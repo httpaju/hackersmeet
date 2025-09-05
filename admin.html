@@ -2,45 +2,82 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>AJ Applications — Admin Panel</title>
+  <title>AJ Admin — Secure Chat</title>
   <style>
-    body{background:#0b0b0b;color:#bfe;font-family:monospace;padding:20px;}
-    .box{background:#071;padding:12px;border-radius:6px;margin-bottom:12px;}
-    button,input{margin:4px;padding:8px;background:#111;color:#bfe;border:1px solid #333;}
-    table{width:100%;border-collapse:collapse;margin-top:8px;}
-    th,td{padding:6px;border-bottom:1px solid #222;}
+    body{background:#070707;color:#cfc;font-family:monospace;padding:18px;}
+    input,button{padding:8px;margin:6px;background:#111;color:#cfc;border:1px solid #233;}
+    .box{background:#022;padding:12px;border-radius:6px;margin-bottom:12px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:6px;border-bottom:1px solid #222}
   </style>
 </head>
 <body>
-<h2>AJ Hacker Chat — Admin Panel</h2>
-<div class="box">
-  <div id="loginArea">
-    <input id="password" type="password" placeholder="Admin password"/>
+  <h2>AJ Applications — Admin Panel</h2>
+  <div class="box" id="loginBox">
+    <input id="pw" type="password" placeholder="Admin password">
     <button onclick="login()">Login</button>
-    <span id="loginStatus"></span>
+    <span id="status"></span>
   </div>
-  <div id="controls" style="display:none;">
-    <button onclick="refreshList()">Refresh Users</button>
-    <input id="targetUser" placeholder="username"/>
+  <div class="box" id="ctl" style="display:none;">
+    <button onclick="refresh()">Refresh Users</button>
+    <input id="target" placeholder="username">
     <button onclick="kick()">Kick</button>
     <button onclick="ban()">Ban</button>
     <button onclick="unban()">Unban</button>
     <hr>
-    <h3>Broadcast</h3>
-    <input id="bcMsg" placeholder="message"/>
-    <button onclick="broadcast()">Send</button>
+    <input id="bcmsg" placeholder="Broadcast message"><button onclick="broadcast()">Send</button>
     <hr>
-    <h3>Poll</h3>
-    <input id="pollQ" placeholder="Question"/>
-    <input id="pollOpts" placeholder="Options (comma separated)"/>
-    <button onclick="createPoll()">Start</button>
-    <button onclick="showResults()">Show Results</button>
-    <pre id="pollRes"></pre>
-    <div id="msg"></div>
+    <input id="pollq" placeholder="Poll question">
+    <input id="pollopts" placeholder="Options,comma separated">
+    <button onclick="startPoll()">Start Poll</button>
+    <button onclick="pollResults()">Poll Results</button>
+    <pre id="pollres"></pre>
   </div>
-</div>
-<div id="users"></div>
+  <div id="users"></div>
 
-<script src="qazygfxzsergvcakjfhdssdhjgczj,hzbcdsfb,dhczkhz,cgd,cbzhcgzcgd.js"></script>
+<script>
+let adminToken = null;
+async function login(){
+  const pw = document.getElementById('pw').value;
+  const r = await fetch('/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw})});
+  const j = await r.json();
+  if(j.ok && j.token){ adminToken = j.token; document.getElementById('status').innerText='OK'; document.getElementById('ctl').style.display='block'; refresh();}
+  else { document.getElementById('status').innerText='Failed'; }
+}
+async function refresh(){
+  const r = await fetch('/admin/list',{headers:{'Authorization':'Bearer '+adminToken}});
+  const j = await r.json();
+  if(!j.ok) return;
+  let h = '<table><tr><th>User</th><th>Room</th></tr>';
+  for(const u of j.users) h += `<tr><td>${u.username}</td><td>${u.room}</td></tr>`;
+  h += '</table>';
+  document.getElementById('users').innerHTML = h;
+}
+async function act(url){
+  const t = document.getElementById('target').value;
+  await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+adminToken},body:JSON.stringify({username:t})});
+  refresh();
+}
+function kick(){ act('/admin/kick') }
+function ban(){ act('/admin/ban') }
+function unban(){ act('/admin/unban') }
+
+async function broadcast(){
+  const m = document.getElementById('bcmsg').value;
+  await fetch('/admin/broadcast',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+adminToken},body:JSON.stringify({message:m})});
+}
+
+async function startPoll(){
+  const q = document.getElementById('pollq').value;
+  const opts = document.getElementById('pollopts').value.split(',').map(x=>x.trim()).filter(x=>x);
+  await fetch('/admin/poll',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+adminToken},body:JSON.stringify({question:q,options:opts})});
+}
+
+async function pollResults(){
+  const r = await fetch('/admin/poll/results',{headers:{'Authorization':'Bearer '+adminToken}});
+  const j = await r.json();
+  document.getElementById('pollres').innerText = JSON.stringify(j,null,2);
+}
+</script>
 </body>
 </html>
