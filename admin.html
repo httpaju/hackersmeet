@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AJ Applications — Admin Panel</title>
+  <style>
+    body{background:#0b0b0b;color:#bfe;font-family:monospace;padding:20px;}
+    .box{background:#071;padding:12px;border-radius:6px;margin-bottom:12px;}
+    button,input{margin:4px;padding:8px;background:#111;color:#bfe;border:1px solid #333;}
+    table{width:100%;border-collapse:collapse;margin-top:8px;}
+    th,td{padding:6px;border-bottom:1px solid #222;}
+  </style>
+</head>
+<body>
+<h2>AJ Hacker Chat — Admin Panel</h2>
+<div class="box">
+  <div id="loginArea">
+    <input id="password" type="password" placeholder="Admin password"/>
+    <button onclick="login()">Login</button>
+    <span id="loginStatus"></span>
+  </div>
+  <div id="controls" style="display:none;">
+    <button onclick="refreshList()">Refresh Users</button>
+    <input id="targetUser" placeholder="username"/>
+    <button onclick="kick()">Kick</button>
+    <button onclick="ban()">Ban</button>
+    <button onclick="unban()">Unban</button>
+    <hr>
+    <h3>Broadcast</h3>
+    <input id="bcMsg" placeholder="message"/>
+    <button onclick="broadcast()">Send</button>
+    <hr>
+    <h3>Poll</h3>
+    <input id="pollQ" placeholder="Question"/>
+    <input id="pollOpts" placeholder="Options (comma separated)"/>
+    <button onclick="createPoll()">Start</button>
+    <button onclick="showResults()">Show Results</button>
+    <pre id="pollRes"></pre>
+    <div id="msg"></div>
+  </div>
+</div>
+<div id="users"></div>
+
+<script>
+
+</script>
+</body>
+</html>
