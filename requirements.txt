@@ -1,4 +1,7 @@
 fastapi
 uvicorn[standard]
+python-jose[cryptography]
+passlib[bcrypt]
 websockets
+requests
 rich
