@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # ---------------- Config ----------------
 ADMIN_USER = "ajadmin"
 # change this password before deploying!
-_ADMIN_PASSWORD_PLAINTEXT = "super_secure_password_123"
+_ADMIN_PASSWORD_PLAINTEXT = "$2y$10$SYqDaSKZu/c3qwlAOT0Iq.u9ysl/9SVI6PlqjmCCxmSLxiWLnLTRa"
 ADMIN_PASS_HASH = hashlib.sha256(_ADMIN_PASSWORD_PLAINTEXT.encode()).hexdigest()
 ADMIN_TOKEN_TTL = 60 * 60  # 1 hour
 
