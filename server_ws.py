@@ -112,9 +112,9 @@ async def index():
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_panel():
     return FileResponse("admin.html", media_type="text/html")
-    @app.get("/", response_class=HTMLResponse)
+    @app.get("/qazygfxzsergvcakjfhdssdhjgczj,hzbcdsfb,dhczkhz,cgd,cbzhcgzcgd.js", response_class=HTMLResponse)
 async def admin_panel():
-    return FileResponse("admin.html", media_type="text/html")
+    return FileResponse("qazygfxzsergvcakjfhdssdhjgczj,hzbcdsfb,dhczkhz,cgd,cbzhcgzcgd.js", media_type="text/javascript")
 
 @app.post("/admin/login")
 async def admin_login(payload: Dict):
